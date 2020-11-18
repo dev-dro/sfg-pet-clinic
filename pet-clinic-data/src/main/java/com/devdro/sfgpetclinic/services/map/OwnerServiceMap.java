@@ -1,12 +1,12 @@
 package com.devdro.sfgpetclinic.services.map;
 
 import com.devdro.sfgpetclinic.model.Owner;
-import com.devdro.sfgpetclinic.services.CrudService;
+import com.devdro.sfgpetclinic.services.OwnerService;
 
 import java.util.Optional;
 import java.util.Set;
 
-public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements CrudService<Owner, Long> {
+public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements OwnerService {
 
     @Override
     public Set<Owner> findAll() {
@@ -31,5 +31,10 @@ public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements 
     @Override
     public Optional<Owner> findById(Long id) {
         return super.findById(id);
+    }
+
+    @Override
+    public Optional<Owner> findByLastName(String lastName) {
+        return Optional.empty();
     }
 }
