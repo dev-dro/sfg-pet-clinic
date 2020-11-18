@@ -2,12 +2,10 @@ package com.devdro.sfgpetclinic.services;
 
 import com.devdro.sfgpetclinic.model.Owner;
 
-import java.util.Set;
+import java.util.Optional;
 
-public interface OwnerService {
+public interface OwnerService extends CrudService<Owner, Long> {
 
-    Owner findByLastName(String lastName);
-    Owner findById(Long id);
-    Owner save(Owner owner);
-    Set<Owner> findAll();
+    Optional<Owner> findByLastName(String lastName);
+
 }
