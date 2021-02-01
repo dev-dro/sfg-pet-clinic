@@ -5,10 +5,12 @@ import com.devdro.sfgpetclinic.model.Pet;
 import com.devdro.sfgpetclinic.model.PetType;
 import com.devdro.sfgpetclinic.model.Speciality;
 import com.devdro.sfgpetclinic.model.Vet;
+import com.devdro.sfgpetclinic.model.Visit;
 import com.devdro.sfgpetclinic.services.OwnerService;
 import com.devdro.sfgpetclinic.services.PetTypeService;
 import com.devdro.sfgpetclinic.services.SpecialityService;
 import com.devdro.sfgpetclinic.services.VetService;
+import com.devdro.sfgpetclinic.services.VisitService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -22,12 +24,14 @@ public class DataLoader implements CommandLineRunner {
     private final SpecialityService specialityService;
     private final OwnerService ownerService;
     private final VetService vetService;
+    private final VisitService visitService;
 
-    public DataLoader(PetTypeService petTypeService, SpecialityService specialityService, OwnerService ownerService, VetService vetService) {
+    public DataLoader(PetTypeService petTypeService, SpecialityService specialityService, OwnerService ownerService, VetService vetService, VisitService visitService) {
         this.petTypeService = petTypeService;
         this.specialityService = specialityService;
         this.ownerService = ownerService;
         this.vetService = vetService;
+        this.visitService = visitService;
     }
 
     @Override
@@ -92,6 +96,13 @@ public class DataLoader implements CommandLineRunner {
         ownerService.save(owner2);
 
         System.out.println("Loaded Owners...");
+
+        Visit catVisit = new Visit();
+        catVisit.setPet(pet2);
+        catVisit.setDate(LocalDate.now());
+        catVisit.setDescription("Sneeze kitty");
+
+        Optional<Visit> savedVisit = visitService.save(catVisit);
 
         Vet vet1 = new Vet();
         vet1.setFirstName("Sam");
