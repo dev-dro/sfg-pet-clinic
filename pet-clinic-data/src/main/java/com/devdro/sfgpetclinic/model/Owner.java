@@ -40,4 +40,6 @@ public class Owner extends Person {
         this.telephone = telephone;
         this.pets = pets;
     }
+
+
 }
