@@ -84,7 +84,7 @@ class OwnerControllerTest {
     void processFindFormReturnMany() throws Exception {
         when(ownerService.findAllByLastNameLike(anyString())).thenReturn(new ArrayList<>(owners));
 
-        mockMvc.perform(get("/owners/owners"))
+        mockMvc.perform(get("/owners/find/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("owners/ownersList"))
                 .andExpect(model().attribute("owners", hasSize(2)));
@@ -95,7 +95,7 @@ class OwnerControllerTest {
         Owner owner = Owner.builder().id(1L).build();
         when(ownerService.findAllByLastNameLike(anyString())).thenReturn(Collections.singletonList(owner));
 
-        mockMvc.perform(get("/owners/owners"))
+        mockMvc.perform(get("/owners/find/"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/owners/1"));
     }
@@ -124,7 +124,7 @@ class OwnerControllerTest {
 
         mockMvc.perform(post("/owners/new"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:owners/1"))
+                .andExpect(view().name("redirect:/owners/1"))
                 .andExpect(model().attributeExists("owner"));
         verify(ownerService).save(any());
     }
@@ -144,7 +144,7 @@ class OwnerControllerTest {
 
         mockMvc.perform(post("/owners/1/edit"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:owners/1"))
+                .andExpect(view().name("redirect:/owners/1"))
                 .andExpect(model().attributeExists("owner"));
         verify(ownerService).save(any());
     }
