@@ -46,4 +46,9 @@ public class PetTypeSpringJpaService implements PetTypeService {
     public void deleteById(Long id) {
         petTypeRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<PetType> findByName(String name) {
+        return petTypeRepository.findByName(name);
+    }
 }

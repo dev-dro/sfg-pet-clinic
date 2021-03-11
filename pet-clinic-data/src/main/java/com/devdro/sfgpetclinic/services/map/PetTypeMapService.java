@@ -36,4 +36,9 @@ public class PetTypeMapService extends AbstractMapService<PetType, Long> impleme
     public Optional<PetType> findById(Long id) {
         return super.findById(id);
     }
+
+    @Override
+    public Optional<PetType> findByName(String name) {
+        return Optional.empty();
+    }
 }
