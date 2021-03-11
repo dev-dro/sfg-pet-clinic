@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/owners/{ownerId}/pets/{petId}/visit")
+@RequestMapping("/owners/{ownerId}/pets/{petId}/visits")
 public class VisitController {
 
     public static final String PETS_CREATE_OR_UPDATE_VISIT_FORM = "pets/createOrUpdateVisitForm";
@@ -47,6 +47,25 @@ public class VisitController {
         if (result.hasErrors()) {
             return PETS_CREATE_OR_UPDATE_VISIT_FORM;
         } else {
+            this.visitService.save(visit);
+            return "redirect:/owners/" + ownerId;
+        }
+    }
+
+    @GetMapping("/{visitId}/edit")
+    public String initUpdateForm(@PathVariable Long visitId, Model model) {
+        model.addAttribute("visit", visitService.findById(visitId).orElse(null));
+        return PETS_CREATE_OR_UPDATE_VISIT_FORM;
+    }
+
+    @PostMapping("/{visitId}/edit")
+    public String processUpdateForm(@PathVariable Long visitId, @PathVariable Long ownerId, @Validated Visit visit, Pet pet, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            visit.setPet(pet);
+            model.addAttribute("visit",  visit);
+            return PETS_CREATE_OR_UPDATE_VISIT_FORM;
+        } else {
+            pet.addVisit(visit);
             this.visitService.save(visit);
             return "redirect:/owners/" + ownerId;
         }

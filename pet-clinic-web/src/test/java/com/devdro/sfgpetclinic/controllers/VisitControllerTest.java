@@ -54,7 +54,7 @@ class VisitControllerTest {
     void initCreateProcess() throws Exception {
         when(petService.findById(any())).thenReturn(Optional.of(Pet.builder().id(1L).build()));
 
-        mockMvc.perform(get("/owners/1/pets/1/visit/new"))
+        mockMvc.perform(get("/owners/1/pets/1/visits/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("pets/createOrUpdateVisitForm"));
     }
@@ -64,7 +64,27 @@ class VisitControllerTest {
         when(petService.findById(any())).thenReturn(Optional.of(Pet.builder().id(1L).build()));
         when(visitService.save(any())).thenReturn(Optional.of(Visit.builder().id(1L).build()));
 
-        mockMvc.perform(post("/owners/1/pets/1/visit/new"))
+        mockMvc.perform(post("/owners/1/pets/1/visits/new"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/owners/1"));
+        verify(visitService).save(any());
+    }
+
+    @Test
+    void initUpdateProcess() throws Exception {
+        when(petService.findById(any())).thenReturn(Optional.of(Pet.builder().id(1L).build()));
+
+        mockMvc.perform(get("/owners/1/pets/1/visits/1/edit"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("pets/createOrUpdateVisitForm"));
+    }
+
+    @Test
+    void processUpdateProcess() throws Exception {
+        when(petService.findById(any())).thenReturn(Optional.of(Pet.builder().id(1L).build()));
+        when(visitService.save(any())).thenReturn(Optional.of(Visit.builder().id(1L).build()));
+
+        mockMvc.perform(post("/owners/1/pets/1/visits/1/edit"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/owners/1"));
         verify(visitService).save(any());
