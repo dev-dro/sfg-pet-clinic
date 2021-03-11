@@ -1,14 +1,18 @@
 package com.devdro.sfgpetclinic.controllers;
 
+import com.devdro.sfgpetclinic.model.Owner;
 import com.devdro.sfgpetclinic.services.OwnerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 @RequestMapping({"/owners"})
@@ -32,8 +36,28 @@ public class OwnerController {
     }
 
     @RequestMapping("/find")
-    public String findOwners() {
-        return "not-implemented";
+    public String findOwners(Model model) {
+        model.addAttribute("owner", Owner.builder().build());
+        return "owners/findOwners";
+    }
+
+    @RequestMapping("/owners")
+    public String processFindOwners(Owner owner, BindingResult result, Model model) {
+        if (owner.getLastName() == null) {
+            owner.setLastName("");
+        }
+
+        List<Owner> owners = this.ownerService.findAllByLastNameLike(owner.getLastName());
+        if (owners.isEmpty()) {
+            result.rejectValue("lastName", "notFound", "not found");
+            return "owners/findOwners";
+        } else if (owners.size() == 1) {
+            owner = owners.iterator().next();
+            return "redirect:/owners/" + owner.getId();
+        } else {
+            model.addAttribute("owners", owners);
+            return "owners/ownersList";
+        }
     }
 
     @GetMapping("/{ownerId}")
