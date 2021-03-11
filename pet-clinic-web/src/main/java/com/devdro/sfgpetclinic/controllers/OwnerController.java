@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping({"/owners"})
 public class OwnerController {
 
-    public static final String CREATE_OR_UPDATE_OWNERS_FORM = "owners/createOrUpdateOwnersForm";
+    public static final String CREATE_OR_UPDATE_OWNERS_FORM = "owners/createOrUpdateOwnerForm";
     private final OwnerService ownerService;
 
     public OwnerController(OwnerService ownerService) {
@@ -32,19 +32,13 @@ public class OwnerController {
         dataBinder.setDisallowedFields("id");
     }
 
-    @RequestMapping({"", "/", "/index", "/index.html"})
-    public String listOwners(Model model) {
-        model.addAttribute("owners", ownerService.findAll());
-        return "owners/index";
-    }
-
     @RequestMapping("/find")
     public String findOwners(Model model) {
         model.addAttribute("owner", Owner.builder().build());
         return "owners/findOwners";
     }
 
-    @RequestMapping("/owners")
+    @RequestMapping("")
     public String processFindOwners(Owner owner, BindingResult result, Model model) {
         if (owner.getLastName() == null) {
             owner.setLastName("");
